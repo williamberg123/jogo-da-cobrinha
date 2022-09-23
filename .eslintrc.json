@@ -1,0 +1,77 @@
+{
+	"env": {
+		"browser": true,
+		"es2021": true,
+		"node": true
+	},
+	"extends": [
+		"plugin:react/recommended",
+		"airbnb"
+	],
+	"parser": "@typescript-eslint/parser",
+	"parserOptions": {
+		"ecmaFeatures": {
+			"jsx": true
+		},
+		"ecmaVersion": "latest",
+		"sourceType": "module"
+	},
+	"plugins": [
+		"react",
+		"@typescript-eslint"
+	],
+	"settings": {
+		"import/resolver": {
+			"node": {
+				"extensions": [
+					".js",
+					".jsx",
+					".ts",
+					".tsx"
+				]
+			}
+		}
+	},
+	"rules": {
+		"import/extensions": [
+			"error",
+			"ignorePackages",
+			{
+				"js": "never",
+				"jsx": "never",
+				"ts": "never",
+				"tsx": "never"
+			}
+		],
+		"indent": "off",
+		"no-tabs": "off",
+		"react/jsx-indent": "off",
+		"react/react-in-jsx-scope": "off",
+		"react/jsx-curly-spacing": "off",
+		"arrow-body-style": "off",
+		"default-case": "off",
+		"array-bracket-spacing": "off",
+		"react/jsx-props-no-spreading": "off",
+		"object-curly-newline": "off",
+		"react/jsx-one-expression-per-line": "off",
+		"react/jsx-filename-extension": "off",
+		"object-property-newline": "off",
+		"react/no-array-index-key": "off",
+		"react/require-default-props": "off",
+		"eqeqeq": "off",
+		"no-alert": "off",
+		"react/jsx-indent-props": "off",
+		"template-curly-spacing": "off",
+		"consistent-return": "off",
+		"max-len": "off",
+		"no-eval": "off",
+		"import/prefer-default-export": "off",
+		"camelcase": "off",
+		"jsx-a11y/anchor-is-valid": "off",
+		"react/function-component-definition": "off",
+		"implicit-arrow-linebreak": "off",
+		"no-confusing-arrow": "off",
+		"no-restricted-globals": "off",
+		"no-nested-ternary": "off"
+	}
+}
