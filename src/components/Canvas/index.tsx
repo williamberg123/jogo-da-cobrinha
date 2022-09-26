@@ -1,45 +1,110 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Container } from './styles';
 
 export default function Canvas() {
-	const [x, setX] = useState(0);
-	const [y, setY] = useState(0);
+	const [interval, setIntervalState] = useState(0);
+	const [coorX, setCoorX] = useState(0);
+	const [coorY, setCoorY] = useState(0);
+	const [eixo, setEixo] = useState('');
+	const [quant, setQuant] = useState(10);
 
 	let canvas = null;
-	let ctx = null;
-	let interval = null;
+	let ctx: CanvasRenderingContext2D;
+
+	const clear = () => {
+		if (coorX === 300) {
+			ctx?.clearRect(coorX - quant, coorY, 10, 10);
+			ctx?.clearRect(coorX, coorY, 10, 10);
+			setCoorX(0);
+			return;
+		}
+
+		if (coorX === -10) {
+			ctx?.clearRect(coorX - quant, coorY, 10, 10);
+			ctx?.clearRect(coorX, coorY, 10, 10);
+			setCoorX(290);
+			return;
+		}
+
+		if (coorY === 150) {
+			ctx?.clearRect(coorX, coorY - quant, 10, 10);
+			ctx?.clearRect(coorX, coorY, 10, 10);
+			setCoorY(0);
+			return;
+		}
+
+		if (coorY === -10) {
+			ctx?.clearRect(coorX, coorY - quant, 10, 10);
+			ctx?.clearRect(coorX, coorY, 10, 10);
+			setCoorY(140);
+			return;
+		}
+
+		if (eixo === 'x') {
+			ctx?.clearRect(coorX - quant, coorY, 10, 10);
+		} else {
+			ctx?.clearRect(coorX, coorY - quant, 10, 10);
+		}
+	};
+
+	const setDirection = (newEixo: string, newQuant: number) => {
+		if (!(eixo === newEixo)) {
+			setEixo(newEixo);
+			setQuant(newQuant);
+
+			clearInterval(interval);
+
+			setIntervalState(setInterval(() => {
+				if (newEixo === 'x') {
+					setCoorX((s) => s + newQuant);
+				} else {
+					setCoorY((s) => s + newQuant);
+				}
+			}, 200));
+		}
+	};
+
+	const keyboardActions = (e: KeyboardEvent) => {
+		if (e.key === 'ArrowRight') {
+			setDirection('x', 10);
+		}
+
+		if (e.key === 'ArrowLeft') {
+			setDirection('x', -10);
+		}
+
+		if (e.key === 'ArrowDown') {
+			setDirection('y', 10);
+		}
+
+		if (e.key === 'ArrowUp') {
+			setDirection('y', -10);
+		}
+	};
 
 	useEffect(() => {
 		canvas = document.getElementById('CanvasElement') as HTMLCanvasElement;
 		ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
-		console.log(x, y);
-		ctx.fillRect(x, y, 10, 10);
-	}, [x, y]);
+		ctx.fillRect(coorX, coorY, 10, 10);
 
-	const eixoX = (quant: number) => {
-		ctx.clearRect(x, y, 10, 10);
-		setX(x + quant);
-	};
+		clear();
+	}, [coorX, coorY, eixo]);
 
-	const eixoY = (quant: number) => {
-		ctx.clearRect(x, y, 10, 10);
-		setY((s) => s + quant);
-	};
+	useEffect(() => {
+		window.addEventListener('keyup', keyboardActions);
 
-	const setDirection = (eixo: string, quant: number) => {
-		interval = eixo === 'x'
-			? setInterval(() => {
-				eixoX(quant);
-			}, 1000)
-			: setInterval(() => {
-				eixoY(quant);
-			}, 1000);
-	};
+		return () => {
+			window.removeEventListener('keyup', keyboardActions);
+		};
+	}, []);
 
 	return (
 		<>
 			<Container id="CanvasElement" />
+			<button type="button" onClick={() => setDirection('x', -10)}>Left</button>
 			<button type="button" onClick={() => setDirection('x', 10)}>Right</button>
+			<button type="button" onClick={() => setDirection('y', 10)}>Down</button>
+			<button type="button" onClick={() => setDirection('y', -10)}>Up</button>
 		</>
 	);
 }
